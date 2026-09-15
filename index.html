@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Pest Control Pro - Islip NY</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark-red: #4a0000;
+            --bg-darker-red: #2b0000;
+            --accent-red: #ff3333;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --light-card: rgba(255, 255, 255, 0.92);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark-red), var(--bg-darker-red));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Ambient Apple-style Floating Motion Orbs */
+        .ambient-orb {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(255, 51, 51, 0.2) 0%, rgba(74, 0, 0, 0) 70%);
+            border-radius: 50vw;
+            z-index: 0;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        .orb-1 { top: -100px; left: -100px; }
+        .orb-2 { bottom: -100px; right: -100px; animation-delay: -6s; }
+
+        @keyframes floatOrb {
+            0% { transform: translateY(0px) scale(1) rotate(0deg); }
+            100% { transform: translateY(60px) scale(1.15) rotate(15deg); }
+        }
+
+        /* Navigation Bar with Motion Blur */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #ffcccc;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ffcccc;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Wrapper */
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 130px auto 80px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page-section.active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Apple Scroll Reveal Motion Classes */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Glassmorphism Card Container with Smooth Hover Float */
+        .glass-card {
+            background: var(--light-card);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            border-radius: 26px;
+            padding: 45px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+            margin-bottom: 40px;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.005);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Custom Typography Classes replacing standard H1, H2, H3 for the Blog Page */
+        .blog-title-main {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--bg-dark-red);
+            font-size: 2.3rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .blog-heading-section {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--bg-dark-red);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .blog-heading-sub {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--bg-dark-red);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 25px;
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--bg-dark-red);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 30px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 25px;
+        }
+
+        p, li {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons & CTA */
+        .btn-primary {
+            display: inline-block;
+            background: var(--bg-dark-red);
+            color: #ffffff;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 20px rgba(74, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-red);
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 18px 30px rgba(255, 51, 51, 0.45);
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-box i {
+            font-size: 2.5rem;
+            color: var(--bg-dark-red);
+            margin-bottom: 15px;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-box:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Contact Form Styles */
+        .contact-form-container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--bg-dark-red);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-red);
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        /* Success Alert State */
+        .form-success-msg {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            animation: fadeInScale 0.4s ease forwards;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* FAQ Accordion Styling */
+        .faq-item {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 14px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            padding: 18px 22px;
+            font-weight: 700;
+            color: var(--bg-dark-red);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .faq-question i {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-answer {
+            padding: 0 22px 18px 22px;
+            color: var(--text-muted);
+            display: none;
+            animation: fadeInDown 0.4s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(43, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            color: #ffffff;
+            margin-top: 60px;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Layout */
+        @media(max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Floating Background Motion Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
+    <!-- Navigation Bar -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Quick Pest Control Pro</div>
+            <ul class="nav-links">
+                <li><a onclick="switchPage('home')" class="nav-item active" id="nav-home">Home</a></li>
+                <li><a onclick="switchPage('service')" class="nav-item" id="nav-service">Services</a></li>
+                <li><a onclick="switchPage('about')" class="nav-item" id="nav-about">About</a></li>
+                <li><a onclick="switchPage('blog')" class="nav-item" id="nav-blog">Blog</a></li>
+                <li><a onclick="switchPage('contact')" class="nav-item" id="nav-contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+
+        <!-- ================= HOME PAGE ================= -->
+        <section id="home" class="page-section active-page">
+            <div class="glass-card reveal-element">
+                <div class="grid-2">
+                    <div>
+                        <h1>Elite Pest Eradication in Long Island</h1>
+                        <p>Welcome to Quick Pest Control Pro, your high-performance shield against unwanted household invaders. Specializing in targeted treatments across Islip and surrounding areas, we guarantee absolute peace of mind with cutting-edge eradication methods.</p>
+                        <br>
+                        <a onclick="switchPage('contact')" class="btn-primary">Book Inspection Now</a>
+                    </div>
+                    <div>
+                        <div class="feature-box" style="text-align: center;">
+                            <i class="fa-solid fa-shield-virus"></i>
+                            <h3>100% Safe & Guaranteed</h3>
+                            <p>Advanced eco-friendly treatments tailored strictly for residential and commercial safety.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="feature-box reveal-element">
+                    <i class="fa-solid fa-bug"></i>
+                    <h3>Targeted Elimination</h3>
+                    <p>Pinpoint solutions focused directly on root colony destruction rather than temporary repelling.</p>
+                </div>
+                <div class="feature-box reveal-element">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h3>Rapid Response</h3>
+                    <p>Emergency same-day appointments available for critical infestations across Islip, NY.</p>
+                </div>
+                <div class="feature-box reveal-element">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <h3>Certified Experts</h3>
+                    <p>Fully licensed technicians equipped with next-gen tactical eradication tools.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SERVICE PAGE ================= -->
+        <section id="service" class="page-section">
+            <div class="glass-card reveal-element">
+                <h1>Our Professional Services</h1>
+                <p>We provide robust, specialized defense systems against complex urban and suburban pest challenges.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="feature-box reveal-element">
+                    <i class="fa-solid fa-bug-slash"></i>
+                    <h3>Cockroach Elimination</h3>
+                    <p>Comprehensive baiting, barrier spraying, and nest cleansing to eradicate German, American, and Oriental roaches permanently.</p>
+                </div>
+                <div class="feature-box reveal-element">
+                    <i class="fa-solid fa-spider"></i>
+                    <h3>General Pest Defense</h3>
+                    <p>Complete perimeter protection plans covering ants, spiders, silverfish, and other crawling pests.</p>
+                </div>
+                <div class="feature-box reveal-element">
+                    <i class="fa-solid fa-house-chimney-crack"></i>
+                    <h3>Preventative Seal-Up</h3>
+                    <p>Thorough entry point auditing and sealing to ensure your structure remains fortress-tight year-round.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABOUT PAGE ================= -->
+        <section id="about" class="page-section">
+            <div class="glass-card reveal-element">
+                <div class="grid-2">
+                    <div>
+                        <h1>About Quick Pest Control Pro</h1>
+                        <p>Established with a mission to redefine modern pest management standards, Quick Pest Control Pro brings uncompromising precision to every project. We understand how disruptive infestations can be to your daily rhythm.</p>
+                        <p>By blending advanced technical training with environmentally responsible practices, we ensure your living spaces stay hygienic, secure, and pristine.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3>Our Core Mission</h3>
+                        <p><i class="fa-solid fa-check" style="color:var(--accent-red);"></i> Complete eradication on first service</p>
+                        <p><i class="fa-solid fa-check" style="color:var(--accent-red);"></i> Transparent procedures and execution</p>
+                        <p><i class="fa-solid fa-check" style="color:var(--accent-red);"></i> Ultimate protection for families & pets</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= BLOG PAGE (H1, H2, H3 Removed) ================= -->
+        <section id="blog" class="page-section">
+            <div class="glass-card reveal-element">
+                <div class="blog-title-main">The Ultimate Guide to Cockroach Eradication in Long Island Homes</div>
+                <p style="font-style: italic; color: #666;">Published by Editorial Team | Content Guide</p>
+                <hr style="border: 0; height: 1px; background: rgba(0,0,0,0.1); margin: 20px 0;">
+
+                <div class="blog-heading-sub">Introduction: The Hidden Menace in Long Island Neighborhoods</div>
+                <p>Living in Long Island, New York, offers incredible coastal beauty, vibrant communities, and historic charm. However, local weather patterns and high humidity levels create an inviting environment for various household pests. Among them, cockroaches stand out as one of the most resilient, unhygienic, and anxiety-inducing invaders. When German or American roaches breach your kitchen boundaries, DIY sprays simply do not cut it. Homeowners require a professional <a href="https://quickpestcontrolpro.com/pest-control-islip-ny" target="_blank" style="color: var(--accent-red); font-weight:600; text-decoration: underline;">cockroach exterminator islip</a> residents can entirely trust for long-term elimination.</p>
+
+                <p>Cockroaches are nocturnal scavengers capable of slipping through microscopic gaps under doors, utility lines, and window frames. Once inside, they multiply rapidly, hiding behind refrigerators, inside dark wall voids, and deep within plumbing networks. Addressing an infestation requires more than a quick fix; it demands a strategic, multi-layered tactical response plan.</p>
+
+                <div class="blog-heading-section">Understanding Common Cockroach Species Found in New York</div>
+                <p>Before launching a targeted counter-offensive, identifying the specific species occupying your residence is crucial. Different roaches behave differently, prefer distinct micro-climates, and react uniquely to specific treatment formulas.</p>
+                
+                <div class="blog-heading-sub">German Cockroaches</div>
+                <p>Easily recognized by their smaller size and two dark parallel stripes running down their pronotum, German cockroaches are the most frequent indoor pest. They prefer warm, humid locations like kitchens and bathrooms. Because of their fast reproductive rate, a minor sighting can quickly evolve into a severe indoor crisis, necessitating immediate intervention by a qualified <a href="https://quickpestcontrolpro.com/pest-control-islip-ny" target="_blank" style="color: var(--accent-red); font-weight:600; text-decoration: underline;">cockroach exterminator islip</a> property owners rely upon.</p>
+
+                <div class="blog-heading-sub">American Cockroaches</div>
+                <p>Often referred to incorrectly as water bugs, American cockroaches are much larger—frequently reaching lengths of over an inch and a half. They thrive in damp, dark environments such as basements, crawl spaces, and commercial drainage systems. When these large pests wander upward into living quarters, homeowners experience severe distress.</p>
+
+                <div class="blog-heading-section">Why DIY Treatments Fail Against Severe Infestations</div>
+                <p>Many homeowners make the mistake of relying entirely on over-the-counter aerosol cans or grocery store foggers when they spot a roach scuttling across the kitchen floor. While these retail products may kill a few visible bugs, they utterly fail to eradicate the underlying colony.</p>
+                <p>Aerosols frequently disperse the surviving roaches, driving them deeper into inaccessible wall voids and electrical panels where they establish secondary satellite nests. Furthermore, cockroach egg cases (oothecae) feature hard protective shells that resist common chemical sprays. True eradication requires professional-grade micro-encapsulated residual insecticides and professional insect growth regulators (IGRs) distributed systematically.</p>
+
+                <div class="blog-heading-section">Customer Testimonial from Long Island</div>
+                <div style="background: rgba(255,255,255,0.8); padding: 25px; border-left: 4px solid var(--accent-red); border-radius: 8px; margin: 20px 0;">
+                    <p style="font-style: italic; color: #333; margin-bottom: 10px;">"We started noticing small bugs in our pantry late last summer. After trying every store-bought trap available with zero success, the problem worsened. We finally booked a certified <a href="https://quickpestcontrolpro.com/pest-control-islip-ny" target="_blank" style="color: var(--accent-red); font-weight:600; text-decoration: underline;">cockroach exterminator islip</a> locals recommended. Their technicians arrived promptly, inspected every inch of our kitchen, and implemented a precise gel-baiting and barrier treatment. Within a single week, our home was completely free of pests. Outstanding professionalism!"</p>
+                    <p style="font-weight: 700; color: var(--bg-dark-red); margin-bottom: 0;">— Michael R., Homeowner in Islip, NY</p>
+                </div>
+
+                <div class="blog-heading-section">Step-by-Step Professional Eradication Process</div>
+                <p>Professional pest management follows a strict engineering-style protocol to guarantee total colony collapse. Here is what an expert treatment deployment looks like:</p>
+                <ol>
+                    <li><strong>Comprehensive Inspection:</strong> Locating harborage zones, moisture sources, and entry pathways using specialized flushing agents and flashlights.</li>
+                    <li><strong>Targeted Gel Baiting:</strong> Applying specialized protein-laced gel baits in discrete crevices where roaches feed and share food with nymphs.</li>
+                    <li><strong>Residual Barrier Spraying:</strong> Establishing invisible micro-barriers across baseboards and entry thresholds to block incoming migration.</li>
+                    <li><strong>Growth Regulation (IGR):</strong> Disrupting the hormonal development cycle of remaining nymphs so they cannot mature or reproduce.</li>
+                </ol>
+
+                <div class="blog-heading-section">Preventive Maintenance Tips to Keep Your Home Pest-Free</div>
+                <p>Once your property has been cleared, maintaining strict preventative habits ensures your defense barriers remain unbroken. Incorporate these daily routines:</p>
+                <ul>
+                    <li>Store all pantry food items in airtight glass or thick plastic containers.</li>
+                    <li>Wipe down countertops, kitchen sinks, and dining areas every evening to eliminate crumb and water residue.</li>
+                    <li>Fix leaking pipes, loose faucet joints, and condensation lines immediately to eliminate hydration sources.</li>
+                    <li>Seal gaps around utility pipes, baseboards, and door sweeps using silicone caulk and steel wool.</li>
+                </ul>
+
+                <div class="blog-heading-section">CONKLUTION</div>
+                <p>Dealing with a cockroach infestation can feel overwhelming, stressful, and unsanitary. However, you do not have to battle resilient invaders alone. By partnering with an experienced <a href="https://quickpestcontrolpro.com/pest-control-islip-ny" target="_blank" style="color: var(--accent-red); font-weight:600; text-decoration: underline;">cockroach exterminator islip</a> residents trust, you secure permanent protection, restored peace of mind, and a pristine living environment for your loved ones. Take action today and reclaim your home.</p>
+
+                <div class="blog-heading-section" style="margin-top: 40px;">F&Q (Frequently Asked Questions)</div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How quickly do professional treatments eliminate roaches?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most homeowners notice a drastic reduction within 48 to 72 hours as baits take effect across the colony. Total eradication is typically achieved within 7 to 14 days depending on initial infestation density.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Are the treatments safe for household pets and children?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes. Certified technicians utilize precision placement methods, such as concealed gel baits in out-of-reach crevices, minimizing exposure while ensuring maximum toxicity toward target pests.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How can I prevent cockroaches from returning after treatment?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Maintain rigorous kitchen sanitation, store food securely in sealed containers, eliminate standing water, and schedule routine quarterly inspection check-ups.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CONTACT PAGE ================= -->
+        <section id="contact" class="page-section">
+            <div class="glass-card reveal-element">
+                <div class="contact-form-container">
+                    <h1 style="text-align: center; margin-bottom: 10px;">Send Us a Message</h1>
+                    <p style="text-align: center; margin-bottom: 30px;">Fill out the form below with your details and inquiry. Our team will get back to you promptly.</p>
+                    
+                    <div id="successAlert" class="form-success-msg">
+                        <i class="fa-solid fa-check-circle"></i> Thank you! Your details have been submitted successfully.
+                    </div>
+
+                    <form id="userContactForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="userName">Your Full Name</label>
+                            <input type="text" id="userName" name="userName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail">Email Address</label>
+                            <input type="email" id="userEmail" name="userEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userPhone">Phone Number</label>
+                            <input type="tel" id="userPhone" name="userPhone" placeholder="Enter your phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userMessage">Your Message</label>
+                            <textarea id="userMessage" name="userMessage" placeholder="Describe your inquiry or pest concern..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; text-align: center;">Submit Details</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Quick Pest Control Pro. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Apple Motion, Reveal Observer, and Tab Routing -->
+    <script>
+        function initReveals() {
+            const activeSection = document.querySelector('.page-section.active-page');
+            if (activeSection) {
+                const reveals = activeSection.querySelectorAll('.reveal-element');
+                reveals.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('revealed');
+                    }, index * 120);
+                });
+            }
+        }
+
+        function switchPage(pageId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active-page');
+                const reveals = section.querySelectorAll('.reveal-element');
+                reveals.forEach(el => el.classList.remove('revealed'));
+            });
+
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.classList.add('active-page');
+                initReveals();
+            }
+
+            const targetNav = document.getElementById('nav-' + pageId);
+            if (targetNav) {
+                targetNav.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                answer.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            document.getElementById('userContactForm').reset();
+            const alertBox = document.getElementById('successAlert');
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initReveals();
+        });
+    </script>
+</body>
+</html>
